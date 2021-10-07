@@ -7,6 +7,7 @@ import 'package:zoom_widget/MultiTouchGestureRecognizer.dart';
 class Zoom extends StatefulWidget {
   final double maxZoomWidth, maxZoomHeight;
 
+  final bool zoomEnabled;
   final Widget child;
   final Color backgroundColor;
   final Color canvasColor;
@@ -25,6 +26,7 @@ class Zoom extends StatefulWidget {
 
   Zoom({
     Key? key,
+    this.zoomEnabled = true,
     double? maxZoomWidth,
     double? maxZoomHeight,
     required this.child,
@@ -356,7 +358,7 @@ class _ZoomState extends State<Zoom> with TickerProviderStateMixin {
           },
           child: GestureDetector(
             onTap: widget.onTap,
-            onDoubleTap: () {
+            onDoubleTap: widget.zoomEnabled ? () {
               if (widget.doubleTapZoom) {
                 doubleTapScale = scale;
 
@@ -367,8 +369,8 @@ class _ZoomState extends State<Zoom> with TickerProviderStateMixin {
                 }
                 scaleAnimation.forward(from: 0.0);
               }
-            },
-            onScaleStart: (details) {
+            } : null,
+            onScaleStart: widget.zoomEnabled ? (details) {
               downTouchLeft = details.focalPoint.dx * (1 / scale);
               downTouchTop = details.focalPoint.dy * (1 / scale);
 
@@ -376,8 +378,8 @@ class _ZoomState extends State<Zoom> with TickerProviderStateMixin {
               scaleLeft = 0;
               changeTop = details.focalPoint.dy;
               changeLeft = details.focalPoint.dx;
-            },
-            onScaleUpdate: (details) {
+            } : null,
+            onScaleUpdate: widget.zoomEnabled ? (details) {
               double up = details.focalPoint.dy - changeTop;
               double down = (changeTop - details.focalPoint.dy) * -1;
               double left = details.focalPoint.dx - changeLeft;
@@ -454,10 +456,10 @@ class _ZoomState extends State<Zoom> with TickerProviderStateMixin {
                     (auxLeft + localLeft + centerLeft + scaleLeft) * -1,
                     (auxTop + localTop + centerTop + scaleTop) * -1));
               }
-            },
-            onScaleEnd: (details) {
+            } : null,
+            onScaleEnd: widget.zoomEnabled ? (details) {
               endEscale(constraints);
-            },
+            } : null,
             child: Container(
               width: constraints.maxWidth,
               height: constraints.maxHeight,
