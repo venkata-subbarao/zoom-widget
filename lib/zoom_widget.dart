@@ -313,6 +313,7 @@ class _ZoomState extends State<Zoom> with TickerProviderStateMixin {
           }
         }
 
+      if (widget.zoomEnabled) {
         if (!portrait && constraints.maxHeight > constraints.maxWidth) {
           portrait = true;
           centerTop = 0;
@@ -324,6 +325,7 @@ class _ZoomState extends State<Zoom> with TickerProviderStateMixin {
           centerLeft = 0;
           scale = 1.0;
         }
+      }
 
         return RawGestureDetector(
           gestures: {
